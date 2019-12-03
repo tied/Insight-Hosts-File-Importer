@@ -44,16 +44,13 @@ public class DataManager {
                 Stream<String> lines = Files.lines(Paths.get(configuration.getHostsFile()));
 
                 lines.forEach((line) -> {
-                    // Remove Comment
                     int commentPosition = line.indexOf("#");
                     if (commentPosition != -1) {
                         line = line.substring(0, commentPosition);
                     }
 
-                    // Empty Lines
                     line = line.trim();
-                    if (line.isEmpty()) {
-
+                    if (!line.isEmpty()) {
                         List<String> lineParts = new ArrayList<>();
                         String[] var5 = WHITESPACES.split(line);
                         int var6 = var5.length;
