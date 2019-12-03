@@ -6,8 +6,10 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.Impor
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.ImportDataHolder;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.InsightImportModule;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.ModuleOTSelector;
+import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.InsightSchemaExternal;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.validation.ValidationResult;
+import me.eddelbuettel.plugins.jira.importer.manager.ImportManager;
 import me.eddelbuettel.plugins.jira.importer.manager.StructureManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -40,6 +42,16 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
     @Override
     public InsightSchemaExternal predefinedStructure(ImportConfiguration configuration) {
         return (new StructureManager()).getPredefinedStructure();
+    }
+
+    @Override
+    public TemplateImportConfiguration templateImportConfiguration(ImportConfiguration configuration) {
+        try {
+            return (new ImportManager().templateImportConfiguration());
+        } catch (Exception e) {
+            this.logger.error("Unable to prepare insight external data for template configuration " + configuration, e);
+            throw new ImportComponentException(e);
+        }
     }
 
     @Override
