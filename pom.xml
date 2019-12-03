@@ -82,6 +82,7 @@
             <groupId>io.riada</groupId>
             <artifactId>insight-import-module-tools</artifactId>
             <version>${insight.import.tools.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- WIRED TEST RUNNER DEPENDENCIES -->
@@ -127,6 +128,14 @@
                     <productDataVersion>${jira.version}</productDataVersion>
                     <jvmArgs>${jira.jvmargs}</jvmArgs>
                     <allowGoogleTracking>false</allowGoogleTracking>
+
+                    <pluginDependencies>
+                        <pluginDependency>
+                            <groupId>io.riada</groupId>
+                            <artifactId>insight-import-module-tools</artifactId>
+                        </pluginDependency>
+                    </pluginDependencies>
+
                     <!-- Uncomment to install TestKit backdoor in JIRA. -->
                     <!--
                     <pluginArtifacts>
@@ -151,6 +160,7 @@
 
                         <!-- Add package import here -->
                         <Import-Package>
+                            io.riada.*;version="${insight.import.tools.version}",
                             *;version="0";resolution:=optional
                         </Import-Package>
 
@@ -201,7 +211,7 @@
     <properties>
         <jira.version>7.13.0</jira.version>
         <amps.version>8.0.2</amps.version>
-        <jira.jvmargs>-Xms1024m -Xmx2048m -Duser.language=en -Duser.country=EN</jira.jvmargs>
+        <jira.jvmargs>-Xms1024m -Xmx2048m -XX:+UseStringDeduplication -Duser.language=en -Duser.country=EN</jira.jvmargs>
         <insight.version>6.4.3</insight.version>
         <insight.model.version>0.3.9</insight.model.version>
         <insight.import.tools.version>1.14.0</insight.import.tools.version>
