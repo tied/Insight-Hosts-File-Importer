@@ -202,7 +202,7 @@
         <jira.version>7.13.0</jira.version>
         <amps.version>8.0.2</amps.version>
         <jira.jvmargs>-Xms1024m -Xmx2048m -Duser.language=en -Duser.country=EN</jira.jvmargs>
-        <insight.version>8.3.0</insight.version>
+        <insight.version>6.4.3</insight.version>
         <insight.model.version>0.3.9</insight.model.version>
         <insight.import.tools.version>1.14.0</insight.import.tools.version>
         <plugin.testrunner.version>2.0.1</plugin.testrunner.version>
