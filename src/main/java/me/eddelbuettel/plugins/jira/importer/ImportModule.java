@@ -14,8 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ImportModule extends AbstractInsightImportModule<ImportConfiguration> implements InsightImportModule<ImportConfiguration> {
 
@@ -58,7 +61,14 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
 
     @Override
     public ValidationResult validateAndTestConfiguration(ImportConfiguration configuration) {
-        return super.validateAndTestConfiguration(configuration);
+        File file = new File(configuration.getHostsFile());
+        if (file.exists()) {
+            return ValidationResult.OK();
+        } else {
+            Map<String, String> error = new HashMap<>();
+            error.put("hosts", "Can't find the hosts file");
+            return ValidationResult.error(error);
+        }
     }
 
     @Override
