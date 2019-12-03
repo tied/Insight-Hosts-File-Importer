@@ -20,5 +20,12 @@
 
         <context>insight-hosts-file-integration</context>
     </web-resource>
+
+    <insight-import key="insight-hostfile-import" name="Hosts file import" class="me.eddelbuettel.plugins.jira.importer.ImportModule">
+        <description>Hostfile import module used to import data from the system hosts file</description>
+        <icon>/download/resources/${project.groupId}.${project.artifactId}:insight-hosts-file-integration-resources/images/import.png</icon>
+        <license-type>UNLICENSED</license-type>
+        <predefined-implementation>false</predefined-implementation>
+    </insight-import>
     
 </atlassian-plugin>
