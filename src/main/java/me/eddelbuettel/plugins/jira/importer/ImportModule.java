@@ -9,6 +9,7 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.Modul
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.InsightSchemaExternal;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.validation.ValidationResult;
+import me.eddelbuettel.plugins.jira.importer.manager.DataManager;
 import me.eddelbuettel.plugins.jira.importer.manager.ImportManager;
 import me.eddelbuettel.plugins.jira.importer.manager.StructureManager;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -18,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +28,16 @@ import java.util.Map;
 public class ImportModule extends AbstractInsightImportModule<ImportConfiguration> implements InsightImportModule<ImportConfiguration> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    private static DataLocator ipAddressLocator = StructureManager.getIpAddressLocator();
+    private static DataLocator domainNamesLocator = StructureManager.getDomainNamesLocator();
+    private static DataLocator domainNameLocator = StructureManager.getDomainNameLocator();
 
     public ImportModule() {
     }
 
     @Override
-    public ImportDataHolder dataHolder(ImportConfiguration importConfiguration, ModuleOTSelector moduleOTSelector) throws ImportComponentException {
-        return null;
+    public ImportDataHolder dataHolder(ImportConfiguration configuration, ModuleOTSelector moduleOTSelector) throws ImportComponentException {
+        return this.dataHolder(configuration, moduleOTSelector);
     }
 
     @Override
@@ -56,7 +62,11 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
 
     @Override
     public List<DataLocator> fetchDataLocators(ImportConfiguration importConfiguration, ModuleOTSelector moduleOTSelector) throws ImportComponentException {
-        return null;
+        if (Selector.IP_ADDRESS.name().equals(moduleOTSelector.getSelector())) {
+            return Arrays.asList(ipAddressLocator, domainNamesLocator);
+        } else {
+            return Selector.DOMAIN_NAME.name().equals(moduleOTSelector.getSelector()) ? Collections.singletonList(domainNameLocator) : Collections.emptyList();
+        }
     }
 
     @Override
@@ -85,6 +95,11 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
 
     @Override
     public ImportDataHolder dataHolder(ImportConfiguration configuration, ModuleOTSelector moduleOTSelector, @Nullable List<DataLocator> configuredDataLocators, @Nullable List<ModuleOTSelector> enabledModuleOTSelectors) throws ImportComponentException {
-        return null;
+        try {
+            return (new DataManager().dataHolder(configuration, moduleOTSelector, configuredDataLocators, enabledModuleOTSelectors));
+        } catch (Exception e) {
+            this.logger.error("Unable to fetch data holder using conf " + configuration, e);
+            throw new ImportComponentException("Unable to fetch data holder from Module", e);
+        }
     }
 }
