@@ -38,6 +38,7 @@ public class DataManager {
 
     public ImportDataHolder dataHolder(ImportConfiguration configuration, ModuleOTSelector moduleOTSelector, @Nullable List<DataLocator> configuredDataLocators, @Nullable List<ModuleOTSelector> enabledModuleOTSelectors) throws ImportComponentException {
 
+        // TODO: Refactor Hostfile parser
         List<DataEntry> dataEntries = new ArrayList<>();
         if (!moduleOTSelector.isEmpty()) {
             try {

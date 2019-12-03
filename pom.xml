@@ -14,8 +14,8 @@
         <url>http://www.example.com/</url>
     </organization>
 
-    <name>Insight Hosts File Integration</name>
-    <description>This is the Insight Hosts File Integration plugin for Atlassian JIRA.</description>
+    <name>Insight Hosts File Importer</name>
+    <description>This is the Insight Hosts File Importer plugin for Atlassian JIRA.</description>
     <packaging>atlassian-plugin</packaging>
 
     <dependencies>
