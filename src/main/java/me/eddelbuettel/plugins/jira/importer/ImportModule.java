@@ -6,6 +6,9 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.Impor
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.ImportDataHolder;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.InsightImportModule;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.ModuleOTSelector;
+import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.InsightSchemaExternal;
+import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.validation.ValidationResult;
+import me.eddelbuettel.plugins.jira.importer.manager.StructureManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,11 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
     }
 
     @Override
+    public InsightSchemaExternal predefinedStructure(ImportConfiguration configuration) {
+        return (new StructureManager()).getPredefinedStructure();
+    }
+
+    @Override
     public List<DataLocator> fetchDataLocators(ImportConfiguration importConfiguration, ModuleOTSelector moduleOTSelector) throws ImportComponentException {
         return null;
     }
@@ -46,6 +54,11 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
             this.logger.warn("Unable to transform config to ImportConfiguration " + jsonString, e);
             throw new IllegalArgumentException("Unable to parse configuration as ImportConfiguration " + jsonString, e);
         }
+    }
+
+    @Override
+    public ValidationResult validateAndTestConfiguration(ImportConfiguration configuration) {
+        return super.validateAndTestConfiguration(configuration);
     }
 
     @Override
