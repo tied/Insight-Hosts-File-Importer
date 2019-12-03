@@ -82,7 +82,6 @@
             <groupId>io.riada</groupId>
             <artifactId>insight-import-module-tools</artifactId>
             <version>${insight.import.tools.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- WIRED TEST RUNNER DEPENDENCIES -->
