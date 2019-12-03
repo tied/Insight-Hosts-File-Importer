@@ -63,6 +63,27 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.riadalabs.jira.plugins</groupId>
+            <artifactId>insight</artifactId>
+            <version>${insight.version}</version>
+            <!-- <classifier>api</classifier> -->
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.riadalabs</groupId>
+            <artifactId>insight-core-model</artifactId>
+            <version>${insight.model.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.riada</groupId>
+            <artifactId>insight-import-module-tools</artifactId>
+            <version>${insight.import.tools.version}</version>
+        </dependency>
+
         <!-- WIRED TEST RUNNER DEPENDENCIES -->
         <dependency>
             <groupId>com.atlassian.plugins</groupId>
@@ -164,10 +185,26 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>riada</id>
+            <url>https://repo.riada.io/repository/riada-repo/</url>
+        </repository>
+        <!--
+        <repository>
+            <id>riada-snapshots</id>
+            <url>https://repo.riada.io/repository/riada-snapshots/</url>
+        </repository>
+        -->
+    </repositories>
+
     <properties>
         <jira.version>7.13.0</jira.version>
         <amps.version>8.0.2</amps.version>
         <jira.jvmargs>-Xms1024m -Xmx2048m -Duser.language=en -Duser.country=EN</jira.jvmargs>
+        <insight.version>8.3.0</insight.version>
+        <insight.model.version>0.3.9</insight.model.version>
+        <insight.import.tools.version>1.14.0</insight.import.tools.version>
         <plugin.testrunner.version>2.0.1</plugin.testrunner.version>
         <atlassian.spring.scanner.version>2.0.1</atlassian.spring.scanner.version>
         <springframework.version>4.1.7.RELEASE</springframework.version>
