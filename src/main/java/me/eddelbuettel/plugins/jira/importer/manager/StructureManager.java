@@ -5,6 +5,7 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.model
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.InsightSchemaExternal;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.ObjectSchemaExternal;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.ObjectTypeExternal;
+import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.ReferenceTypeExternal;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ public class StructureManager {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     private static final int OBJECT_SCHEMA_ID = 1; /* Just a fake id */
     private int objectTypeSequenceNumber = 1;
+    private int referenceTypeSequenceNumber = 1;
 
     public StructureManager() {
     }
@@ -27,6 +29,13 @@ public class StructureManager {
 
         InsightSchemaExternal insightSchemaExternal = new InsightSchemaExternal();
         insightSchemaExternal.setObjectSchema(objectSchemaExternal);
+
+        ReferenceTypeExternal relatesToDomainReferenceTypeExternal = new ReferenceTypeExternal();
+        relatesToDomainReferenceTypeExternal.setId(referenceTypeSequenceNumber++);
+        relatesToDomainReferenceTypeExternal.setName("Relates to Domain");
+        relatesToDomainReferenceTypeExternal.setDescription("This object relates to Domain");
+        relatesToDomainReferenceTypeExternal.setColor("4C858A");
+        insightSchemaExternal.setReferenceTypes(Collections.singletonList(relatesToDomainReferenceTypeExternal));
 
         IconExternal icon = getIcon("Hosts");
         insightSchemaExternal.getIcons().add(icon);
