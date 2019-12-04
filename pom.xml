@@ -84,6 +84,15 @@
             <version>${insight.import.tools.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-resolver -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver</artifactId>
+            <version>4.1.43.Final</version>
+        </dependency>
+
+
+
         <!-- WIRED TEST RUNNER DEPENDENCIES -->
         <dependency>
             <groupId>com.atlassian.plugins</groupId>
@@ -132,6 +141,10 @@
                         <pluginDependency>
                             <groupId>io.riada</groupId>
                             <artifactId>insight-import-module-tools</artifactId>
+                        </pluginDependency>
+                        <pluginDependency>
+                            <groupId>io.netty</groupId>
+                            <artifactId>netty-resolver</artifactId>
                         </pluginDependency>
                     </pluginDependencies>
 
