@@ -1,17 +1,17 @@
-package me.eddelbuettel.plugins.jira.importer;
+package me.eddelbuettel.plugins.jira.importer.model;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum  Selector {
+public enum ModuleSelector {
     IP_ADDRESS("IP_ADDRESS"),
     DOMAIN_NAME("DOMAIN_NAME"),
     UNKNOWN("");
 
     private String selector;
-    private static Map<String, Selector> operatorToEnumMapping;
+    private static Map<String, ModuleSelector> operatorToEnumMapping;
 
-    private Selector(String selector) {
+    private ModuleSelector(String selector) {
         this.selector = selector;
     }
 
@@ -23,19 +23,19 @@ public enum  Selector {
         this.selector = selector;
     }
 
-    public static Selector getInstance(String operator) {
+    public static ModuleSelector getInstance(String operator) {
         if (operatorToEnumMapping == null) {
             initMapping();
         }
 
-        Selector selector = operatorToEnumMapping.get(operator.toUpperCase());
+        ModuleSelector moduleSelector = operatorToEnumMapping.get(operator.toUpperCase());
 
-        return selector != null ? selector : Selector.UNKNOWN;
+        return moduleSelector != null ? moduleSelector : ModuleSelector.UNKNOWN;
     }
 
     private static void initMapping() {
         operatorToEnumMapping = new HashMap<>();
-        for (Selector s : values()) {
+        for (ModuleSelector s : values()) {
             operatorToEnumMapping.put(s.selector, s);
         }
     }

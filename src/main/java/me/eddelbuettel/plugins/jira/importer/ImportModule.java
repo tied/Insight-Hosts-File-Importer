@@ -12,6 +12,7 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.model
 import me.eddelbuettel.plugins.jira.importer.manager.DataManager;
 import me.eddelbuettel.plugins.jira.importer.manager.ImportManager;
 import me.eddelbuettel.plugins.jira.importer.manager.StructureManager;
+import me.eddelbuettel.plugins.jira.importer.model.ModuleSelector;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,10 +63,10 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
 
     @Override
     public List<DataLocator> fetchDataLocators(ImportConfiguration importConfiguration, ModuleOTSelector moduleOTSelector) throws ImportComponentException {
-        if (Selector.IP_ADDRESS.name().equals(moduleOTSelector.getSelector())) {
+        if (ModuleSelector.IP_ADDRESS.name().equals(moduleOTSelector.getSelector())) {
             return Arrays.asList(ipAddressLocator, domainNamesLocator);
         } else {
-            return Selector.DOMAIN_NAME.name().equals(moduleOTSelector.getSelector()) ? Collections.singletonList(domainNameLocator) : Collections.emptyList();
+            return ModuleSelector.DOMAIN_NAME.name().equals(moduleOTSelector.getSelector()) ? Collections.singletonList(domainNameLocator) : Collections.emptyList();
         }
     }
 

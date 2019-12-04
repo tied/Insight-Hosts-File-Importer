@@ -4,7 +4,7 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.DataL
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration.AttributeMapping;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration.ObjectTypeMapping;
-import me.eddelbuettel.plugins.jira.importer.Selector;
+import me.eddelbuettel.plugins.jira.importer.model.ModuleSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class ImportManager {
         List<ObjectTypeMapping> objectTypeMappings = new ArrayList<>();
         ObjectTypeMapping objectTypeMapping = new ObjectTypeMapping();
         objectTypeMapping.setObjectTypeName("IP Address");
-        objectTypeMapping.setSelector(Selector.IP_ADDRESS.getSelector());
+        objectTypeMapping.setSelector(ModuleSelector.IP_ADDRESS.getSelector());
 
         List<AttributeMapping> attributeMappings = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class ImportManager {
         objectTypeMappings.add(objectTypeMapping);
         objectTypeMapping = new ObjectTypeMapping();
         objectTypeMapping.setObjectTypeName("Domain Name");
-        objectTypeMapping.setSelector(Selector.DOMAIN_NAME.getSelector());
+        objectTypeMapping.setSelector(ModuleSelector.DOMAIN_NAME.getSelector());
 
         attributeMapping = new AttributeMapping();
         attributeMapping.setAttributeName("Name");

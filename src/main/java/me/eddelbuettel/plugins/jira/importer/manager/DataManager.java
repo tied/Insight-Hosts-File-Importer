@@ -8,7 +8,7 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.Modul
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.DataEntry;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.SimpleDataEntry;
 import me.eddelbuettel.plugins.jira.importer.ImportConfiguration;
-import me.eddelbuettel.plugins.jira.importer.Selector;
+import me.eddelbuettel.plugins.jira.importer.model.ModuleSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +39,7 @@ public class DataManager {
     public ImportDataHolder dataHolder(ImportConfiguration configuration, ModuleOTSelector moduleOTSelector, @Nullable List<DataLocator> configuredDataLocators, @Nullable List<ModuleOTSelector> enabledModuleOTSelectors) throws ImportComponentException {
 
         // TODO: Refactor Hostfile parser
+        // https://github.com/netty/netty/blob/4.1/resolver/src/main/java/io/netty/resolver/HostsFileParser.java
         List<DataEntry> dataEntries = new ArrayList<>();
         if (!moduleOTSelector.isEmpty()) {
             try {
@@ -63,12 +64,12 @@ public class DataManager {
                             }
                         }
 
-                        if (Selector.IP_ADDRESS.name().equals(moduleOTSelector.getSelector())) {
+                        if (ModuleSelector.IP_ADDRESS.name().equals(moduleOTSelector.getSelector())) {
                             Map<DataLocator, List<String>> dataMapx = new HashMap<>();
                             dataMapx.put(ipAddressLocator, Collections.singletonList(lineParts.get(0)));
                             dataMapx.put(domainNamesLocator, lineParts);
                             dataEntries.add(new SimpleDataEntry(dataMapx));
-                        } else if (Selector.DOMAIN_NAME.name().equals(moduleOTSelector.getSelector())) {
+                        } else if (ModuleSelector.DOMAIN_NAME.name().equals(moduleOTSelector.getSelector())) {
                             lineParts.remove(0);
                             Iterator var10 = lineParts.iterator();
 
