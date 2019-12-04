@@ -12,6 +12,8 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.model
 import me.eddelbuettel.plugins.jira.importer.manager.DataManager;
 import me.eddelbuettel.plugins.jira.importer.manager.ImportManager;
 import me.eddelbuettel.plugins.jira.importer.manager.StructureManager;
+import me.eddelbuettel.plugins.jira.importer.manager.impl.DomainNameService;
+import me.eddelbuettel.plugins.jira.importer.manager.impl.IpAddressService;
 import me.eddelbuettel.plugins.jira.importer.model.ModuleSelector;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -29,9 +31,6 @@ import java.util.Map;
 public class ImportModule extends AbstractInsightImportModule<ImportConfiguration> implements InsightImportModule<ImportConfiguration> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-    private static DataLocator ipAddressLocator = StructureManager.getIpAddressLocator();
-    private static DataLocator domainNamesLocator = StructureManager.getDomainNamesLocator();
-    private static DataLocator domainNameLocator = StructureManager.getDomainNameLocator();
 
     public ImportModule() {
     }
@@ -64,9 +63,9 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
     @Override
     public List<DataLocator> fetchDataLocators(ImportConfiguration importConfiguration, ModuleOTSelector moduleOTSelector) throws ImportComponentException {
         if (ModuleSelector.IP_ADDRESS.name().equals(moduleOTSelector.getSelector())) {
-            return Arrays.asList(ipAddressLocator, domainNamesLocator);
+            return Arrays.asList(IpAddressService.ipAddress, IpAddressService.type, IpAddressService.domainNames);
         } else {
-            return ModuleSelector.DOMAIN_NAME.name().equals(moduleOTSelector.getSelector()) ? Collections.singletonList(domainNameLocator) : Collections.emptyList();
+            return ModuleSelector.DOMAIN_NAME.name().equals(moduleOTSelector.getSelector()) ? Collections.singletonList(DomainNameService.domainName) : Collections.emptyList();
         }
     }
 

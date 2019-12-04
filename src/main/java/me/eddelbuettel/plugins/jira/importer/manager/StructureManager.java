@@ -7,6 +7,8 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.model
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.ObjectSchemaExternal;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.external.baseversion.ObjectTypeExternal;
 import io.riada.StructureUtils;
+import me.eddelbuettel.plugins.jira.importer.manager.impl.DomainNameService;
+import me.eddelbuettel.plugins.jira.importer.manager.impl.IpAddressService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +21,6 @@ public class StructureManager {
     private static final int OBJECT_SCHEMA_ID = 1;
     private int objectTypeSequenceNumber = 1;
     private int referenceTypeSequenceNumber = 1;
-    private static DataLocator ipAddressLocator = new DataLocator("IP Address");
-    private static DataLocator typeLocator = new DataLocator("Type");
-    private static DataLocator domainNamesLocator = new DataLocator("Domain Names");
-    private static DataLocator domainNameLocator = new DataLocator("Domain Name");
 
     public StructureManager() {
     }
@@ -61,12 +59,12 @@ public class StructureManager {
         domainNameObjectTypeExternal.setIcon(icon);
 
         /* Add IP Address Object Attributes */
-        StructureUtils.addTextObjectTypeAttribute("IP Address", ipAddressObjectTypeExternal, ipAddressLocator, true, false, false, "This is the IP Address of the entry", false);
-        StructureUtils.addReferenceObjectTypeAttribute(insightSchemaExternal, "Domain Names", ipAddressObjectTypeExternal, domainNameObjectTypeExternal, "Relates to Domain", true, false, domainNamesLocator, false, null, "These are the related Domain Names", referenceTypeSequenceNumber++, OBJECT_SCHEMA_ID);
-        StructureUtils.addSelectObjectTypeAttribute("Type", ipAddressObjectTypeExternal, typeLocator, "Specifies the type to IPv4 or IPv6");
+        StructureUtils.addTextObjectTypeAttribute("IP Address", ipAddressObjectTypeExternal, IpAddressService.ipAddress, true, false, false, "This is the IP Address of the entry", false);
+        StructureUtils.addSelectObjectTypeAttribute("Type", ipAddressObjectTypeExternal, IpAddressService.type, "Specifies the type to IPv4 or IPv6");
+        StructureUtils.addReferenceObjectTypeAttribute(insightSchemaExternal, "Domain Names", ipAddressObjectTypeExternal, domainNameObjectTypeExternal, "Relates to Domain", true, false, IpAddressService.domainNames, false, null, "These are the related Domain Names", referenceTypeSequenceNumber++, OBJECT_SCHEMA_ID);
 
         /* Add Domain Name Object Attributes */
-        StructureUtils.addTextObjectTypeAttribute("Domain Name", domainNameObjectTypeExternal, domainNameLocator, true, false, false, "This is the Domain Name of the entry", false);
+        StructureUtils.addTextObjectTypeAttribute("Domain Name", domainNameObjectTypeExternal, DomainNameService.domainName, true, false, false, "This is the Domain Name of the entry", false);
 
         return insightSchemaExternal;
     }
@@ -92,19 +90,4 @@ public class StructureManager {
         return iconExternal;
     }
 
-    public static DataLocator getIpAddressLocator() {
-        return ipAddressLocator;
-    }
-
-    public static DataLocator getTypeLocator() {
-        return typeLocator;
-    }
-
-    public static DataLocator getDomainNamesLocator() {
-        return domainNamesLocator;
-    }
-
-    public static DataLocator getDomainNameLocator() {
-        return domainNameLocator;
-    }
 }

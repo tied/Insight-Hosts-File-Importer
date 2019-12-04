@@ -7,6 +7,8 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.Templ
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.MissingObjectsType;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.TemplateHandleMissingObjects;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.ThresholdType;
+import me.eddelbuettel.plugins.jira.importer.manager.impl.DomainNameService;
+import me.eddelbuettel.plugins.jira.importer.manager.impl.IpAddressService;
 import me.eddelbuettel.plugins.jira.importer.model.ModuleSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +20,6 @@ import java.util.List;
 public class ImportManager {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-    private static DataLocator ipAddressLocator = StructureManager.getIpAddressLocator();
-    private static DataLocator typeLocator = StructureManager.getTypeLocator();
-    private static DataLocator domainNamesLocator = StructureManager.getDomainNamesLocator();
-    private static DataLocator domainNameLocator = StructureManager.getDomainNameLocator();
 
     public ImportManager() {
     }
@@ -44,19 +42,19 @@ public class ImportManager {
 
         AttributeMapping attributeMapping = new AttributeMapping();
         attributeMapping.setAttributeName("IP Address");
-        attributeMapping.setAttributeLocators(Collections.singletonList(ipAddressLocator));
+        attributeMapping.setAttributeLocators(Collections.singletonList(IpAddressService.ipAddress));
         attributeMapping.setExternalIdPart(true);
         attributeMappings.add(attributeMapping);
 
         attributeMapping = new AttributeMapping();
         attributeMapping.setAttributeName("Domain Names");
-        attributeMapping.setAttributeLocators(Collections.singletonList(domainNamesLocator));
-        attributeMapping.setObjectMappingIQL("\"Domain Name\" IN (${" + domainNamesLocator.getLocator() + "${0}})");
+        attributeMapping.setAttributeLocators(Collections.singletonList(IpAddressService.domainNames));
+        attributeMapping.setObjectMappingIQL("\"Domain Name\" IN (${" + IpAddressService.domainNames.getLocator() + "${0}})");
         attributeMappings.add(attributeMapping);
 
         attributeMapping = new AttributeMapping();
         attributeMapping.setAttributeName("Type");
-        attributeMapping.setAttributeLocators(Collections.singletonList(typeLocator));
+        attributeMapping.setAttributeLocators(Collections.singletonList(IpAddressService.type));
         attributeMappings.add(attributeMapping);
 
         objectTypeMapping.setAttributesMapping(attributeMappings);
@@ -68,8 +66,8 @@ public class ImportManager {
         objectTypeMapping.setHandleMissingObjects(removeMissingObjects);
 
         attributeMapping = new AttributeMapping();
-        attributeMapping.setAttributeName("Name");
-        attributeMapping.setAttributeLocators(Collections.singletonList(domainNameLocator));
+        attributeMapping.setAttributeName("Domain Name");
+        attributeMapping.setAttributeLocators(Collections.singletonList(DomainNameService.domainName));
         attributeMapping.setExternalIdPart(true);
 
         attributeMappings = new ArrayList<>();

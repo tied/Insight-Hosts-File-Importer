@@ -10,6 +10,8 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.model
 import io.netty.resolver.HostsFileEntries;
 import io.netty.resolver.HostsFileParser;
 import me.eddelbuettel.plugins.jira.importer.ImportConfiguration;
+import me.eddelbuettel.plugins.jira.importer.manager.impl.DomainNameService;
+import me.eddelbuettel.plugins.jira.importer.manager.impl.IpAddressService;
 import me.eddelbuettel.plugins.jira.importer.model.ModuleSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +32,6 @@ import java.util.stream.Collectors;
 public class DataManager {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-    private static DataLocator ipAddressLocator = StructureManager.getIpAddressLocator();
-    private static DataLocator typeLocator = StructureManager.getTypeLocator();
-    private static DataLocator domainNamesLocator = StructureManager.getDomainNamesLocator();
-    private static DataLocator domainNameLocator = StructureManager.getDomainNameLocator();
 
     public DataManager() {
     }
@@ -66,9 +64,9 @@ public class DataManager {
                             }
                         }
                         Map<DataLocator, List<String>> dataMapx = new HashMap<>();
-                        dataMapx.put(ipAddressLocator, Collections.singletonList(inet4Address.getHostAddress()));
-                        dataMapx.put(domainNamesLocator, domainNames);
-                        dataMapx.put(typeLocator, Collections.singletonList("IPv4"));
+                        dataMapx.put(IpAddressService.ipAddress, Collections.singletonList(inet4Address.getHostAddress()));
+                        dataMapx.put(IpAddressService.domainNames, domainNames);
+                        dataMapx.put(IpAddressService.type, Collections.singletonList("IPv4"));
                         dataEntries.add(new SimpleDataEntry(dataMapx));
                     }
 
@@ -81,16 +79,16 @@ public class DataManager {
                             }
                         }
                         Map<DataLocator, List<String>> dataMapx = new HashMap<>();
-                        dataMapx.put(ipAddressLocator, Collections.singletonList(inet6Address.getHostAddress()));
-                        dataMapx.put(domainNamesLocator, domainNames);
-                        dataMapx.put(typeLocator, Collections.singletonList("IPv6"));
+                        dataMapx.put(IpAddressService.ipAddress, Collections.singletonList(inet6Address.getHostAddress()));
+                        dataMapx.put(IpAddressService.domainNames, domainNames);
+                        dataMapx.put(IpAddressService.type, Collections.singletonList("IPv6"));
                         dataEntries.add(new SimpleDataEntry(dataMapx));
                     }
                 } else if (ModuleSelector.DOMAIN_NAME.getSelector().equals(moduleOTSelector.getSelector())) {
 
                     for (Map.Entry<String, Inet4Address> entry : hostsFileEntries.inet4Entries().entrySet()) {
                         Map<DataLocator, List<String>> dataMap = new HashMap<>();
-                        dataMap.put(domainNameLocator, Collections.singletonList(entry.getKey()));
+                        dataMap.put(DomainNameService.domainName, Collections.singletonList(entry.getKey()));
                         dataEntries.add(new SimpleDataEntry(dataMap));
                     }
                 }
