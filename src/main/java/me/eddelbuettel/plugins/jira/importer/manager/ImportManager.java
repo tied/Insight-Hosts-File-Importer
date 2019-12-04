@@ -4,6 +4,9 @@ import com.riadalabs.jira.plugins.insight.services.imports.common.external.DataL
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration.AttributeMapping;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration.ObjectTypeMapping;
+import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.MissingObjectsType;
+import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.TemplateHandleMissingObjects;
+import com.riadalabs.jira.plugins.insight.services.imports.common.external.model.ThresholdType;
 import me.eddelbuettel.plugins.jira.importer.model.ModuleSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ public class ImportManager {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     private static DataLocator ipAddressLocator = StructureManager.getIpAddressLocator();
+    private static DataLocator typeLocator = StructureManager.getTypeLocator();
     private static DataLocator domainNamesLocator = StructureManager.getDomainNamesLocator();
     private static DataLocator domainNameLocator = StructureManager.getDomainNameLocator();
 
@@ -26,10 +30,15 @@ public class ImportManager {
 
         TemplateImportConfiguration templateImportConfiguration = null;
 
+        TemplateHandleMissingObjects removeMissingObjects = new TemplateHandleMissingObjects(MissingObjectsType.REMOVE);
+        removeMissingObjects.setThresholdType(ThresholdType.DAYS);
+        removeMissingObjects.setThreshold(0);
+
         List<ObjectTypeMapping> objectTypeMappings = new ArrayList<>();
         ObjectTypeMapping objectTypeMapping = new ObjectTypeMapping();
         objectTypeMapping.setObjectTypeName("IP Address");
         objectTypeMapping.setSelector(ModuleSelector.IP_ADDRESS.getSelector());
+        objectTypeMapping.setHandleMissingObjects(removeMissingObjects);
 
         List<AttributeMapping> attributeMappings = new ArrayList<>();
 
@@ -45,12 +54,18 @@ public class ImportManager {
         attributeMapping.setObjectMappingIQL("\"Domain Name\" IN (${" + domainNamesLocator.getLocator() + "${0}})");
         attributeMappings.add(attributeMapping);
 
+        attributeMapping = new AttributeMapping();
+        attributeMapping.setAttributeName("Type");
+        attributeMapping.setAttributeLocators(Collections.singletonList(typeLocator));
+        attributeMappings.add(attributeMapping);
+
         objectTypeMapping.setAttributesMapping(attributeMappings);
 
         objectTypeMappings.add(objectTypeMapping);
         objectTypeMapping = new ObjectTypeMapping();
         objectTypeMapping.setObjectTypeName("Domain Name");
         objectTypeMapping.setSelector(ModuleSelector.DOMAIN_NAME.getSelector());
+        objectTypeMapping.setHandleMissingObjects(removeMissingObjects);
 
         attributeMapping = new AttributeMapping();
         attributeMapping.setAttributeName("Name");

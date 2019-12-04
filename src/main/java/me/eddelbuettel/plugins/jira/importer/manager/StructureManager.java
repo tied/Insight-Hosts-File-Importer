@@ -20,6 +20,7 @@ public class StructureManager {
     private int objectTypeSequenceNumber = 1;
     private int referenceTypeSequenceNumber = 1;
     private static DataLocator ipAddressLocator = new DataLocator("IP Address");
+    private static DataLocator typeLocator = new DataLocator("Type");
     private static DataLocator domainNamesLocator = new DataLocator("Domain Names");
     private static DataLocator domainNameLocator = new DataLocator("Domain Name");
 
@@ -62,6 +63,7 @@ public class StructureManager {
         /* Add IP Address Object Attributes */
         StructureUtils.addTextObjectTypeAttribute("IP Address", ipAddressObjectTypeExternal, ipAddressLocator, true, false, false, "This is the IP Address of the entry", false);
         StructureUtils.addReferenceObjectTypeAttribute(insightSchemaExternal, "Domain Names", ipAddressObjectTypeExternal, domainNameObjectTypeExternal, "Relates to Domain", true, false, domainNamesLocator, false, null, "These are the related Domain Names", referenceTypeSequenceNumber++, OBJECT_SCHEMA_ID);
+        StructureUtils.addSelectObjectTypeAttribute("Type", ipAddressObjectTypeExternal, typeLocator, "Specifies the type to IPv4 or IPv6");
 
         /* Add Domain Name Object Attributes */
         StructureUtils.addTextObjectTypeAttribute("Domain Name", domainNameObjectTypeExternal, domainNameLocator, true, false, false, "This is the Domain Name of the entry", false);
@@ -92,6 +94,10 @@ public class StructureManager {
 
     public static DataLocator getIpAddressLocator() {
         return ipAddressLocator;
+    }
+
+    public static DataLocator getTypeLocator() {
+        return typeLocator;
     }
 
     public static DataLocator getDomainNamesLocator() {
