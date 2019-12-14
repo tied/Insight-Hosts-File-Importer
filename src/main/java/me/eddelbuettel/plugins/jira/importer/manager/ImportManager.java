@@ -19,7 +19,7 @@ import java.util.List;
 
 public class ImportManager {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public ImportManager() {
     }
@@ -33,50 +33,65 @@ public class ImportManager {
         removeMissingObjects.setThreshold(0);
 
         List<ObjectTypeMapping> objectTypeMappings = new ArrayList<>();
-        ObjectTypeMapping objectTypeMapping = new ObjectTypeMapping();
-        objectTypeMapping.setObjectTypeName("IP Address");
-        objectTypeMapping.setSelector(ModuleSelector.IP_ADDRESS.getSelector());
-        objectTypeMapping.setHandleMissingObjects(removeMissingObjects);
 
-        List<AttributeMapping> attributeMappings = new ArrayList<>();
+        /* IP Address Object Type */
+        ObjectTypeMapping ipAddressObjectTypeMapping = addObjectTypeMapping("IP Address", ModuleSelector.IP_ADDRESS.getSelector(), removeMissingObjects, false);
+        List<AttributeMapping> ipAddressAttributeMappings = new ArrayList<>();
+        ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.ipAddress, IpAddressService.ipAddress.getLocator(), true));
+        ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.domainNames, IpAddressService.domainNames.getLocator(), false,"\"Domain Name\" IN (${" + IpAddressService.domainNames.getLocator() + "${0}})"));
+        ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.type, IpAddressService.type.getLocator(), false));
+        ipAddressObjectTypeMapping.setAttributesMapping(ipAddressAttributeMappings);
+        objectTypeMappings.add(ipAddressObjectTypeMapping);
 
-        AttributeMapping attributeMapping = new AttributeMapping();
-        attributeMapping.setAttributeName("IP Address");
-        attributeMapping.setAttributeLocators(Collections.singletonList(IpAddressService.ipAddress));
-        attributeMapping.setExternalIdPart(true);
-        attributeMappings.add(attributeMapping);
-
-        attributeMapping = new AttributeMapping();
-        attributeMapping.setAttributeName("Domain Names");
-        attributeMapping.setAttributeLocators(Collections.singletonList(IpAddressService.domainNames));
-        attributeMapping.setObjectMappingIQL("\"Domain Name\" IN (${" + IpAddressService.domainNames.getLocator() + "${0}})");
-        attributeMappings.add(attributeMapping);
-
-        attributeMapping = new AttributeMapping();
-        attributeMapping.setAttributeName("Type");
-        attributeMapping.setAttributeLocators(Collections.singletonList(IpAddressService.type));
-        attributeMappings.add(attributeMapping);
-
-        objectTypeMapping.setAttributesMapping(attributeMappings);
-
-        objectTypeMappings.add(objectTypeMapping);
-        objectTypeMapping = new ObjectTypeMapping();
-        objectTypeMapping.setObjectTypeName("Domain Name");
-        objectTypeMapping.setSelector(ModuleSelector.DOMAIN_NAME.getSelector());
-        objectTypeMapping.setHandleMissingObjects(removeMissingObjects);
-
-        attributeMapping = new AttributeMapping();
-        attributeMapping.setAttributeName("Domain Name");
-        attributeMapping.setAttributeLocators(Collections.singletonList(DomainNameService.domainName));
-        attributeMapping.setExternalIdPart(true);
-
-        attributeMappings = new ArrayList<>();
-        attributeMappings.add(attributeMapping);
-        objectTypeMapping.setAttributesMapping(attributeMappings);
-        objectTypeMappings.add(objectTypeMapping);
+        /* Domain Name Object Type */
+        ObjectTypeMapping domainNameObjectTypeMapping = addObjectTypeMapping("Domain Name", ModuleSelector.DOMAIN_NAME.getSelector(), removeMissingObjects, false);
+        List<AttributeMapping> domainNameAttributeMappings = new ArrayList<>();
+        domainNameAttributeMappings.add(addAttributeMapping(DomainNameService.domainName, DomainNameService.domainName.getLocator(), true));
+        domainNameObjectTypeMapping.setAttributesMapping(domainNameAttributeMappings);
+        objectTypeMappings.add(domainNameObjectTypeMapping);
 
         return TemplateImportConfiguration.createConfigWithMapping(objectTypeMappings);
+    }
 
+    private ObjectTypeMapping addObjectTypeMapping(String objectTypeName, String selector, TemplateHandleMissingObjects templateHandleMissingObjects, boolean disabledByDefault) {
+        ObjectTypeMapping objectTypeMapping = new ObjectTypeMapping();
+        objectTypeMapping.setObjectTypeName(objectTypeName);
+        objectTypeMapping.setSelector(selector);
+        objectTypeMapping.setHandleMissingObjects(templateHandleMissingObjects);
+        if (disabledByDefault) {
+            objectTypeMapping.setDisabledByDefault(true);
+        }
+
+        return objectTypeMapping;
+    }
+
+    private AttributeMapping addAttributeMapping(DataLocator attributeLocator, String attributeName, boolean externalIdPart) {
+        AttributeMapping attributeMapping = new AttributeMapping();
+        attributeMapping.setAttributeLocators(Collections.singletonList(attributeLocator));
+        attributeMapping.setAttributeName(attributeName);
+        attributeMapping.setExternalIdPart(externalIdPart);
+
+        return attributeMapping;
+    }
+
+    private AttributeMapping addAttributeMapping(List<DataLocator> attributeLocator, String attributeName, boolean externalIdPart, boolean isSuggestedLabel) {
+        AttributeMapping attributeMapping = new AttributeMapping();
+        attributeMapping.setAttributeLocators(attributeLocator);
+        attributeMapping.setAttributeName(attributeName);
+        attributeMapping.setExternalIdPart(externalIdPart);
+        attributeMapping.setSuggestedLabel(isSuggestedLabel);
+
+        return attributeMapping;
+    }
+
+    private AttributeMapping addAttributeMapping(DataLocator attributeLocator, String attributeName, boolean externalIdPart, String objectMappingIql) {
+        AttributeMapping attributeMapping = new AttributeMapping();
+        attributeMapping.setAttributeLocators(Collections.singletonList(attributeLocator));
+        attributeMapping.setAttributeName(attributeName);
+        attributeMapping.setObjectMappingIQL(objectMappingIql);
+        attributeMapping.setExternalIdPart(externalIdPart);
+
+        return attributeMapping;
     }
 
 }
