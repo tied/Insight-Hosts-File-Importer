@@ -1,5 +1,7 @@
 package me.eddelbuettel.plugins.jira.importer;
 
+import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
+import com.atlassian.sal.api.message.I18nResolver;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.AbstractInsightImportModule;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.DataLocator;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.ImportComponentException;
@@ -30,9 +32,12 @@ import java.util.Map;
 
 public class ImportModule extends AbstractInsightImportModule<ImportConfiguration> implements InsightImportModule<ImportConfiguration> {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @ComponentImport
+    private final I18nResolver i18n;
 
-    public ImportModule() {
+    public ImportModule(I18nResolver i18n) {
+        this.i18n = i18n;
     }
 
     @Override
@@ -47,13 +52,13 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
 
     @Override
     public InsightSchemaExternal predefinedStructure(ImportConfiguration configuration) {
-        return (new StructureManager()).getPredefinedStructure();
+        return (new StructureManager(i18n)).getPredefinedStructure();
     }
 
     @Override
     public TemplateImportConfiguration templateImportConfiguration(ImportConfiguration configuration) {
         try {
-            return (new ImportManager().templateImportConfiguration());
+            return (new ImportManager(i18n).templateImportConfiguration());
         } catch (Exception e) {
             this.logger.error("Unable to prepare insight external data for template configuration " + configuration, e);
             throw new ImportComponentException(e);
@@ -96,7 +101,7 @@ public class ImportModule extends AbstractInsightImportModule<ImportConfiguratio
     @Override
     public ImportDataHolder dataHolder(ImportConfiguration configuration, ModuleOTSelector moduleOTSelector, @Nullable List<DataLocator> configuredDataLocators, @Nullable List<ModuleOTSelector> enabledModuleOTSelectors) throws ImportComponentException {
         try {
-            return (new DataManager().dataHolder(configuration, moduleOTSelector, configuredDataLocators, enabledModuleOTSelectors));
+            return (new DataManager(i18n).dataHolder(configuration, moduleOTSelector, configuredDataLocators, enabledModuleOTSelectors));
         } catch (Exception e) {
             this.logger.error("Unable to fetch data holder using conf " + configuration, e);
             throw new ImportComponentException("Unable to fetch data holder from Module", e);

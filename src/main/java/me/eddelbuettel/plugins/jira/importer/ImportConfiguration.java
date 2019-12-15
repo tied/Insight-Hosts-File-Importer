@@ -1,6 +1,7 @@
 package me.eddelbuettel.plugins.jira.importer;
 
 import com.atlassian.adapter.jackson.ObjectMapper;
+import com.atlassian.sal.api.message.I18nResolver;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.ImportModuleConfiguration;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.insightfield.InsightFieldConfiguration;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.insightfield.text.InsightFieldTextConfiguration;

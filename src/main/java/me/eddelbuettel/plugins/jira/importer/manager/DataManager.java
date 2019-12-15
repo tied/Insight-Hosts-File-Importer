@@ -1,5 +1,7 @@
 package me.eddelbuettel.plugins.jira.importer.manager;
 
+import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
+import com.atlassian.sal.api.message.I18nResolver;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.DataLocator;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.ImportComponentException;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.ImportDataHolder;
@@ -32,8 +34,10 @@ import java.util.stream.Collectors;
 public class DataManager {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    private I18nResolver i18n;
 
-    public DataManager() {
+    public DataManager(I18nResolver i18n) {
+        this.i18n = i18n;
     }
 
     public ImportDataHolder dataHolder(ImportConfiguration configuration, ModuleOTSelector moduleOTSelector, @Nullable List<DataLocator> configuredDataLocators, @Nullable List<ModuleOTSelector> enabledModuleOTSelectors) throws ImportComponentException {
@@ -66,14 +70,14 @@ public class DataManager {
                         Map<DataLocator, List<String>> dataMapx = new HashMap<>();
                         dataMapx.put(IpAddressService.ipAddress, Collections.singletonList(inet4Address.getHostAddress()));
                         dataMapx.put(IpAddressService.domainNames, domainNames);
-                        dataMapx.put(IpAddressService.type, Collections.singletonList("IPv4"));
+                        dataMapx.put(IpAddressService.type, Collections.singletonList(i18n.getText("insight-hosts-file-integration.object-type-attribute.type.ipv4")));
                         dataEntries.add(new SimpleDataEntry(dataMapx));
                     }
 
                     for (Inet6Address inet6Address : uniqueIp6addresses) {
                         List<String> domainNames = new ArrayList<>();
                         for (Map.Entry<String, Inet6Address> entry : hostsFileEntries.inet6Entries().entrySet()) {
-                            /* Get Domain Names by IPv4 Address */
+                            /* Get Domain Names by IPv6 Address */
                             if (entry.getValue().equals(inet6Address)) {
                                 domainNames.add(entry.getKey());
                             }
@@ -81,7 +85,7 @@ public class DataManager {
                         Map<DataLocator, List<String>> dataMapx = new HashMap<>();
                         dataMapx.put(IpAddressService.ipAddress, Collections.singletonList(inet6Address.getHostAddress()));
                         dataMapx.put(IpAddressService.domainNames, domainNames);
-                        dataMapx.put(IpAddressService.type, Collections.singletonList("IPv6"));
+                        dataMapx.put(IpAddressService.type, Collections.singletonList(i18n.getText("insight-hosts-file-integration.object-type-attribute.type.ipv6")));
                         dataEntries.add(new SimpleDataEntry(dataMapx));
                     }
                 } else if (ModuleSelector.DOMAIN_NAME.getSelector().equals(moduleOTSelector.getSelector())) {
@@ -98,6 +102,5 @@ public class DataManager {
         }
 
         return InMemoryDataHolder.createInMemoryDataHolder(dataEntries);
-
     }
 }

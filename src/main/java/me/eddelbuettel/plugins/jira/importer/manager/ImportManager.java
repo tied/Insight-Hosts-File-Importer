@@ -1,5 +1,6 @@
 package me.eddelbuettel.plugins.jira.importer.manager;
 
+import com.atlassian.sal.api.message.I18nResolver;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.DataLocator;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration;
 import com.riadalabs.jira.plugins.insight.services.imports.common.external.TemplateImportConfiguration.AttributeMapping;
@@ -20,8 +21,10 @@ import java.util.List;
 public class ImportManager {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private I18nResolver i18n;
 
-    public ImportManager() {
+    public ImportManager(I18nResolver i18n) {
+        this.i18n = i18n;
     }
 
     public TemplateImportConfiguration templateImportConfiguration() {
@@ -35,16 +38,16 @@ public class ImportManager {
         List<ObjectTypeMapping> objectTypeMappings = new ArrayList<>();
 
         /* IP Address Object Type */
-        ObjectTypeMapping ipAddressObjectTypeMapping = addObjectTypeMapping("IP Address", ModuleSelector.IP_ADDRESS.getSelector(), removeMissingObjects, false);
+        ObjectTypeMapping ipAddressObjectTypeMapping = addObjectTypeMapping(i18n.getText("insight-hosts-file-integration.object-type.ip-addresses.name"), ModuleSelector.IP_ADDRESS.getSelector(), removeMissingObjects, false);
         List<AttributeMapping> ipAddressAttributeMappings = new ArrayList<>();
         ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.ipAddress, IpAddressService.ipAddress.getLocator(), true));
-        ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.domainNames, IpAddressService.domainNames.getLocator(), false,"\"Domain Name\" IN (${" + IpAddressService.domainNames.getLocator() + "${0}})"));
+        ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.domainNames, IpAddressService.domainNames.getLocator(), false,"\""+ i18n.getText("insight-hosts-file-integration.object-type-attribute.domain-names.name") + "\" IN (${" + IpAddressService.domainNames.getLocator() + "${0}})"));
         ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.type, IpAddressService.type.getLocator(), false));
         ipAddressObjectTypeMapping.setAttributesMapping(ipAddressAttributeMappings);
         objectTypeMappings.add(ipAddressObjectTypeMapping);
 
         /* Domain Name Object Type */
-        ObjectTypeMapping domainNameObjectTypeMapping = addObjectTypeMapping("Domain Name", ModuleSelector.DOMAIN_NAME.getSelector(), removeMissingObjects, false);
+        ObjectTypeMapping domainNameObjectTypeMapping = addObjectTypeMapping(i18n.getText("insight-hosts-file-integration.object-type.domain-names.name"), ModuleSelector.DOMAIN_NAME.getSelector(), removeMissingObjects, false);
         List<AttributeMapping> domainNameAttributeMappings = new ArrayList<>();
         domainNameAttributeMappings.add(addAttributeMapping(DomainNameService.domainName, DomainNameService.domainName.getLocator(), true));
         domainNameObjectTypeMapping.setAttributesMapping(domainNameAttributeMappings);
@@ -93,5 +96,4 @@ public class ImportManager {
 
         return attributeMapping;
     }
-
 }
