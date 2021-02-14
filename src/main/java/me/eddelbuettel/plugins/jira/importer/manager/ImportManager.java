@@ -41,7 +41,7 @@ public class ImportManager {
         ObjectTypeMapping ipAddressObjectTypeMapping = addObjectTypeMapping(i18n.getText("insight-hosts-file-integration.object-type.ip-addresses.name"), ModuleSelector.IP_ADDRESS.getSelector(), removeMissingObjects, false);
         List<AttributeMapping> ipAddressAttributeMappings = new ArrayList<>();
         ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.ipAddress, IpAddressService.ipAddress.getLocator(), true));
-        ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.domainNames, IpAddressService.domainNames.getLocator(), false,"\""+ i18n.getText("insight-hosts-file-integration.object-type-attribute.domain-names.name") + "\" IN (${" + IpAddressService.domainNames.getLocator() + "${0}})"));
+        ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.domainNames, IpAddressService.domainNames.getLocator(), false,"\""+ i18n.getText("insight-hosts-file-integration.object-type-attribute.domain-name.name") + "\" IN (${" + IpAddressService.domainNames.getLocator() + "${0}})"));
         ipAddressAttributeMappings.add(addAttributeMapping(IpAddressService.type, IpAddressService.type.getLocator(), false));
         ipAddressObjectTypeMapping.setAttributesMapping(ipAddressAttributeMappings);
         objectTypeMappings.add(ipAddressObjectTypeMapping);
