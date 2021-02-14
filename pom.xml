@@ -38,7 +38,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -63,21 +63,25 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://repo.riada.io/service/rest/repository/browse/riada-repo/com/riadalabs/jira/plugins/insight/ -->
         <dependency>
             <groupId>com.riadalabs.jira.plugins</groupId>
             <artifactId>insight</artifactId>
             <version>${insight.version}</version>
             <!-- <classifier>api</classifier> -->
+            <classifier>import</classifier>
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://repo.riada.io/service/rest/repository/browse/riada-repo/io/riada/insight-core-model/ -->
         <dependency>
-            <groupId>com.riadalabs</groupId>
+            <groupId>io.riada</groupId>
             <artifactId>insight-core-model</artifactId>
             <version>${insight.model.version}</version>
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://repo.riada.io/service/rest/repository/browse/riada-repo/io/riada/insight-import-module-tools/ -->
         <dependency>
             <groupId>io.riada</groupId>
             <artifactId>insight-import-module-tools</artifactId>
@@ -90,8 +94,6 @@
             <artifactId>netty-resolver</artifactId>
             <version>4.1.43.Final</version>
         </dependency>
-
-
 
         <!-- WIRED TEST RUNNER DEPENDENCIES -->
         <dependency>
@@ -136,6 +138,28 @@
                     <productDataVersion>${jira.version}</productDataVersion>
                     <jvmArgs>${jira.jvmargs}</jvmArgs>
                     <allowGoogleTracking>false</allowGoogleTracking>
+                    <!-- <extractDependencies>false</extractDependencies> -->
+                    <!-- <skipAllPrompts>true</skipAllPrompts> -->
+                    <!-- <extractDependencies>false</extractDependencies> -->
+
+                    <applications>
+                        <application>
+                            <applicationKey>jira-software</applicationKey>
+                            <version>${jira.version}</version>
+                        </application>
+                        <application>
+                            <applicationKey>jira-servicedesk</applicationKey>
+                            <version>${jira.servicedesk.version}</version>
+                        </application>
+                    </applications>
+
+                    <pluginArtifacts>
+                        <pluginArtifact>
+                            <groupId>com.riadalabs.jira.plugins</groupId>
+                            <artifactId>insight</artifactId>
+                            <version>${insight.version}</version>
+                        </pluginArtifact>
+                    </pluginArtifacts>
 
                     <pluginDependencies>
                         <pluginDependency>
@@ -147,6 +171,11 @@
                             <artifactId>netty-resolver</artifactId>
                         </pluginDependency>
                     </pluginDependencies>
+
+                    <systemPropertyVariables>
+                        <atlassian.dev.mode>${dev.mode}</atlassian.dev.mode>
+                        <jira.websudo.is.disabled>${dev.mode}</jira.websudo.is.disabled>
+                    </systemPropertyVariables>
 
                     <!-- Uncomment to install TestKit backdoor in JIRA. -->
                     <!--
@@ -212,26 +241,27 @@
             <id>riada</id>
             <url>https://repo.riada.io/repository/riada-repo/</url>
         </repository>
-        <!--
         <repository>
             <id>riada-snapshots</id>
             <url>https://repo.riada.io/repository/riada-snapshots/</url>
         </repository>
-        -->
     </repositories>
 
     <properties>
-        <jira.version>7.13.0</jira.version>
+        <jira.version>8.5.0</jira.version>
+        <jira.software.version>${jira.version}</jira.software.version>
+        <jira.servicedesk.version>4.5.0</jira.servicedesk.version>
         <amps.version>8.0.2</amps.version>
-        <jira.jvmargs>-Xms1024m -Xmx2048m -XX:+UseStringDeduplication -Duser.language=en -Duser.country=EN</jira.jvmargs>
-        <insight.version>6.4.3</insight.version>
-        <insight.model.version>0.3.9</insight.model.version>
-        <insight.import.tools.version>1.14.0</insight.import.tools.version>
+        <jira.jvmargs>-Xms1024m -Xmx2048m -XX:+UseStringDeduplication -Duser.language=en -Duser.country=UK</jira.jvmargs>
+        <insight.version>8.4.0</insight.version>
+        <insight.model.version>1.0.54</insight.model.version>
+        <insight.import.tools.version>1.15.5</insight.import.tools.version>
         <plugin.testrunner.version>2.0.1</plugin.testrunner.version>
         <atlassian.spring.scanner.version>2.0.1</atlassian.spring.scanner.version>
         <springframework.version>4.1.7.RELEASE</springframework.version>
         <!-- This property ensures consistency between the key in atlassian-plugin.xml and the OSGi bundle's key. -->
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
+        <dev.mode>true</dev.mode>
         <!-- TestKit version 6.x for JIRA 6.x -->
         <testkit.version>6.3.11</testkit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
